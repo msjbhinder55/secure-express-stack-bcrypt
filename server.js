@@ -11,34 +11,18 @@ const someOtherPlaintextPassword = "pass123";
 
 //START_ASYNC -do not remove notes, place code between correct pair of notes.
 bcrypt.hash(myPlaintextPassword, saltRounds, (err, hash) => {
-  if (err) {
-    console.error("Error hashing password:", err);
-    return;
-  }
-  console.log("Hashed password:", hash);
-
-  // Compare with correct password
+  console.log(hash);
   bcrypt.compare(myPlaintextPassword, hash, (err, res) => {
-    if (err) {
-      console.error("Error comparing password:", err);
-      return;
-    }
-    console.log("Comparison with correct password:", res); // Should be true
-  });
-
-  // Compare with incorrect password
-  bcrypt.compare(someOtherPlaintextPassword, hash, (err, res) => {
-    if (err) {
-      console.error("Error comparing password:", err);
-      return;
-    }
-    console.log("Comparison with incorrect password:", res); // Should be false
+    console.log(res);
   });
 });
 //END_ASYNC
 
 //START_SYNC
-
+let hash = bcrypt.hashSync(myPlaintextPassword, saltRounds);
+console.log(hash);
+let result = bcrypt.compareSync(myPlaintextPassword, hash);
+console.log(result);
 //END_SYNC
 
 const PORT = process.env.PORT || 3000;
