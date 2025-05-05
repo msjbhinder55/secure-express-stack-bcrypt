@@ -11,36 +11,34 @@ const someOtherPlaintextPassword = "pass123";
 
 //START_ASYNC -do not remove notes, place code between correct pair of notes.
 bcrypt.hash(myPlaintextPassword, saltRounds, (err, hash) => {
-  if (err) throw err;
-  console.log("Async hash:", hash);
+  if (err) {
+    console.error("Error hashing password:", err);
+    return;
+  }
+  console.log("Hashed password:", hash);
 
-  // Compare the original password with the hash
-  bcrypt.compare(myPlaintextPassword, hash, (err, result) => {
-    if (err) throw err;
-    console.log("Async compare (matching):", result); // true
+  // Compare with correct password
+  bcrypt.compare(myPlaintextPassword, hash, (err, res) => {
+    if (err) {
+      console.error("Error comparing password:", err);
+      return;
+    }
+    console.log("Comparison with correct password:", res); // Should be true
   });
 
-  // Compare a different password with the hash
-  bcrypt.compare(someOtherPlaintextPassword, hash, (err, result) => {
-    if (err) throw err;
-    console.log("Async compare (not matching):", result); // false
+  // Compare with incorrect password
+  bcrypt.compare(someOtherPlaintextPassword, hash, (err, res) => {
+    if (err) {
+      console.error("Error comparing password:", err);
+      return;
+    }
+    console.log("Comparison with incorrect password:", res); // Should be false
   });
 });
 //END_ASYNC
 
 //START_SYNC
-try {
-  const hash = bcrypt.hashSync(myPlaintextPassword, saltRounds);
-  console.log("Sync hash:", hash);
 
-  const match = bcrypt.compareSync(myPlaintextPassword, hash);
-  console.log("Sync compare (matching):", match); // true
-
-  const notMatch = bcrypt.compareSync(someOtherPlaintextPassword, hash);
-  console.log("Sync compare (not matching):", notMatch); // false
-} catch (err) {
-  console.error(err);
-}
 //END_SYNC
 
 const PORT = process.env.PORT || 3000;
